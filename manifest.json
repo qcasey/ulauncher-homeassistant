@@ -1,0 +1,32 @@
+{
+    "required_api_version": "^2.0.0",
+    "name": "Home Assistant",
+    "description": "View and control devices in your HomeAssistant.io instance.",
+    "developer_name": "Quinn Casey",
+    "icon": "images/icon.png",
+    "options": {
+      "query_debounce": 0.5
+    },
+    "preferences": [
+      {
+        "id": "keyword",
+        "type": "keyword",
+        "name": "Home Assistant",
+        "default_value": "ha"
+      },
+      {
+        "id": "hass_url",
+        "type": "text",
+        "name": "Home Assistant instance URL",
+        "description": "With a port, if necessary",
+        "default_value": ""
+      },
+      {
+        "id": "hass_key",
+        "type": "text",
+        "name": "Home Assistant API Key",
+        "description": "https://developers.home-assistant.io/docs/api/rest/",
+        "default_value": ""
+      }
+    ]
+  }
