@@ -115,7 +115,7 @@ class KeywordQueryEventListener(EventListener):
                 continue
 
             if "friendly_name" not in entity["attributes"]:
-                entity["friendly_name"] = entity["entity_id"]
+                entity["attributes"]["friendly_name"] = entity["entity_id"]
 
             # Don't add this item if the query doesn't appear in either friendly_name or id
             entity_appears_in_search = True
