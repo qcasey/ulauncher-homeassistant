@@ -33,7 +33,7 @@ class HomeAssistantExtension(Extension):
 class KeywordQueryEventListener(EventListener):
     def on_event(self, event, extension):
         items = []
-        query = event.get_argument().lower() or str()
+        query = (event.get_argument() or str()).lower()
 
         hass_url = extension.preferences["hass_url"]
         if not hass_url:
