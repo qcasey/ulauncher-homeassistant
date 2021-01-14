@@ -208,7 +208,7 @@ class KeywordQueryEventListener(EventListener):
                         icon=entity_icon,
                         name=item_name.format(
                             action_word,
-                            entity["entity_id"],
+                            entity["attributes"]["friendly_name"],
                         ),
                         description=item_description,
                         on_enter=ExtensionCustomAction(
@@ -228,8 +228,8 @@ class KeywordQueryEventListener(EventListener):
                 items.append(
                     ExtensionResultItem(
                         icon=entity_icon,
-                        name=entity["entity_id"],
-                        description=entity["state"],
+                        name="{} is {}".format(entity["attributes"]["friendly_name"], entity["state"]),
+                        description="{}".format(entity["entity_id"], entity["state"]),
                         on_enter=HideWindowAction()
                         if entity["state"] == "on" or entity["state"] == "off"
                         else CopyToClipboardAction(entity["state"]),
