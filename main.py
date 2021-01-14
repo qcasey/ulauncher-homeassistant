@@ -99,7 +99,13 @@ class KeywordQueryEventListener(EventListener):
             return RenderResultListAction(
                 [
                     ExtensionResultItem(
-                        icon=ICON_FILES["logo"], name="", on_enter=HideWindowAction()
+                        icon=ICON_FILES["logo"],
+                        name=(
+                            "Search for an entity"
+                            if not is_action_word
+                            else 'Send "{}" to an entity'.format(action_word)
+                        ),
+                        on_enter=HideWindowAction(),
                     )
                 ]
             )
@@ -226,7 +232,7 @@ class KeywordQueryEventListener(EventListener):
             items.append(
                 ExtensionResultItem(
                     icon=ICON_FILES["logo"],
-                    name="Entity not found",
+                    name="No entities found",
                     on_enter=HideWindowAction(),
                 )
             )
