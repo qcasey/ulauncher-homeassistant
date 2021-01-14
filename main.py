@@ -155,6 +155,11 @@ class KeywordQueryEventListener(EventListener):
                 if entity["state"] == action_word or entity["state"] == "unavailable":
                     continue
 
+            # Partial hack around https://github.com/qcasey/ulauncher-homeassistant/issues/5
+            if len(entity_query) == 1 and (entity_query[0] in ON_OFF_TYPES or entity_query[0] in OPEN_CLOSE_TYPES):
+                # When query is an exact match against entity classes
+                if entity_query[0] != entity_class: continue
+
             # Don't add this item if the query doesn't appear in either friendly_name or id
             entity_appears_in_search = True
             for query_word in entity_query:
