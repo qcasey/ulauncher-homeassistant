@@ -242,7 +242,7 @@ class KeywordQueryEventListener(EventListener):
             items.append(
                 ExtensionResultItem(
                     icon=ICON_FILES["logo"],
-                    name="No entities found",
+                    name="No valid entities found",
                     on_enter=HideWindowAction(),
                 )
             )
