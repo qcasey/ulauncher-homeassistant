@@ -170,6 +170,7 @@ class KeywordQueryEventListener(EventListener):
             # If we require an action beyond just displaying state
             if is_action_word:
                 item_name = ""
+                item_description = ""
                 endpoint = ""
 
                 # ON / OFF action
@@ -186,6 +187,13 @@ class KeywordQueryEventListener(EventListener):
                     )
                     item_name = "{} {}"
 
+                # Fix for scenes currently "scening"
+                if entity_class != "scene":
+                    item_description = "{} is currently {}".format(
+                        entity["entity_id"],
+                        entity["state"],
+                    )
+
                 # Append action item
                 items.append(
                     ExtensionResultItem(
@@ -194,10 +202,7 @@ class KeywordQueryEventListener(EventListener):
                             action_word,
                             entity["entity_id"],
                         ),
-                        description="{} is currently {}".format(
-                            entity["entity_id"],
-                            entity["state"],
-                        ),
+                        description=item_description,
                         on_enter=ExtensionCustomAction(
                             {
                                 "endpoint": endpoint,
@@ -211,7 +216,7 @@ class KeywordQueryEventListener(EventListener):
                 )
 
             # Otherwise, assume it's a state query
-            else:
+            elif entity_class != "scene":
                 items.append(
                     ExtensionResultItem(
                         icon=entity_icon,
