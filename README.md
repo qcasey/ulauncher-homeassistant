@@ -2,7 +2,7 @@
 
 A [Ulauncher](https://ext.ulauncher.io/) extension to view and control devices in your [HomeAssistant](https://www.home-assistant.io/) instance.
 
-![Demo](./demo.gif)
+![Demo](https://github.com/qcasey/ulauncher-homeassistant/raw/master/demo.gif)
 
 ## Requirements
 
