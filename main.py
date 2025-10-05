@@ -66,7 +66,14 @@ class KeywordQueryEventListener(EventListener):
                 ]
             )
         # Trim hass URL
-        hass_url = hass_url.strip("/")
+        hass_url = hass_url.strip()
+
+        # Ensure hass_url includes a scheme (requests needs http:// or https://)
+        # If user provided e.g. 192.168.1.47:8123, prepend http:// by default
+        if not hass_url.startswith("http://") and not hass_url.startswith("https://"):
+            hass_url = "http://" + hass_url
+        # Remove any trailing slash for consistent joins
+        hass_url = hass_url.rstrip("/")
 
         hass_key = extension.preferences["hass_key"]
         if not hass_key:
@@ -117,13 +124,20 @@ class KeywordQueryEventListener(EventListener):
             "content-type": "application/json",
         }
 
-        response = requests.get(state_query, headers=headers)
-        if not response:
+        try:
+            response = requests.get(state_query, headers=headers, timeout=8)
+            response.raise_for_status()
+        except requests.exceptions.RequestException as e:
+            # Show a friendly error to the user
             return RenderResultListAction(
                 [
                     ExtensionResultItem(
                         icon=ICON_FILES["logo"],
-                        name=response.text,
+                        name="Error contacting Home Assistant: {}".format(str(e)),
+                        description=(
+                            "Check your Home Assistant URL and API Key in extension preferences.\n"
+                            "Expected format: http://<host>:8123 or https://<host>"
+                        ),
                         on_enter=HideWindowAction(),
                     )
                 ]
@@ -258,11 +272,17 @@ class ItemEnterEventListener(EventListener):
         data = event.get_data()
 
         # Make POST request to HA service
-        requests.post(
-            data["endpoint"],
-            data=json.dumps(data["service_data"]),
-            headers=data["headers"],
-        )
+        try:
+            resp = requests.post(
+                data["endpoint"],
+                data=json.dumps(data["service_data"]),
+                headers=data["headers"],
+                timeout=6,
+            )
+            resp.raise_for_status()
+        except requests.exceptions.RequestException:
+            # We don't want the extension to crash; just ignore failures here.
+            pass
 
 
 if __name__ == "__main__":
